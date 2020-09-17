@@ -12,7 +12,7 @@ import (
 
 func GetALlQuizzes(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
-	var quizzes []Quiz
+	var quizzes []Quizzes
 	database, _ := os.LookupEnv("DATABASE_NAME")
 
 	collection := client.Database(database).Collection("quizzes")

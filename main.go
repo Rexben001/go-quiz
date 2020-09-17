@@ -22,11 +22,17 @@ func init() {
 	}
 }
 
-type Quiz struct {
+type Quizzes struct {
 	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	Question string             `json:"question,omitempty" bson:"question,omitempty"`
 	Options  []string           `json:"options,omitempty" bson:"options,omitempty"`
 	Answer   string             `json:"answer,omitempty" bson:"answers,omitempty"`
+}
+
+type Users struct {
+	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Email    string             `json:"email,omitempty" bson:"email,omitempty"`
+	Password string             `json:"password,omitempty" bson:"password,omitempty"`
 }
 
 var client *mongo.Client

@@ -16,7 +16,7 @@ func GetQuiz(response http.ResponseWriter, request *http.Request) {
 
 	database, _ := os.LookupEnv("DATABASE_NAME")
 
-	var quiz Quiz
+	var quiz Quizzes
 	// get the params from the requst
 	params := mux.Vars(request)
 	// convert params id (string) to MongoDB ID
@@ -25,7 +25,7 @@ func GetQuiz(response http.ResponseWriter, request *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	// get item by id
-	err := collection.FindOne(ctx, Quiz{ID: id}).Decode(&quiz)
+	err := collection.FindOne(ctx, Quizzes{ID: id}).Decode(&quiz)
 
 	if err != nil {
 		response.WriteHeader(http.StatusInternalServerError)
