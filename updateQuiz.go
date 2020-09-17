@@ -16,7 +16,7 @@ func UpdateQuiz(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
 	database, _ := os.LookupEnv("DATABASE_NAME")
-	var quiz Quiz
+	var quiz Quizzes
 
 	// get the body request and decode it
 	json.NewDecoder(request.Body).Decode(&quiz)

@@ -31,7 +31,7 @@ func GetALlQuizzes(response http.ResponseWriter, request *http.Request) {
 
 	// iterate over the cursor and save the results as array
 	for cursor.Next(ctx) {
-		var quiz Quiz
+		var quiz Quizzes
 		cursor.Decode(&quiz)
 		quizzes = append(quizzes, quiz)
 	}

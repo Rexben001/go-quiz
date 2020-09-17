@@ -67,5 +67,7 @@ func main() {
 	router.HandleFunc("/quizzes/{id}", UpdateQuiz).Methods("PUT")
 	router.HandleFunc("/quizzes/{id}", DeleteQuiz).Methods("DELETE")
 
+	router.HandleFunc("/signup", CreateUser).Methods("POST")
+
 	http.ListenAndServe(":"+port, router)
 }
