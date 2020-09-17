@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -19,6 +20,13 @@ func init() {
 	if err := godotenv.Load(); err != nil {
 		log.Print("No .env file found")
 	}
+}
+
+type Quiz struct {
+	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Question string             `json:"question,omitempty" bson:"question,omitempty"`
+	Options  []string           `json:"options,omitempty" bson:"options,omitempty"`
+	Answer   string             `json:"answer,omitempty" bson:"answers,omitempty"`
 }
 
 var client *mongo.Client
@@ -47,6 +55,11 @@ func main() {
 	// define router
 	router := mux.NewRouter()
 	router.HandleFunc("/", Index)
+	router.HandleFunc("/quizzes", AddQuiz).Methods("POST")
+	router.HandleFunc("/quizzes", GetALlQuizzes).Methods("GET")
+	router.HandleFunc("/quizzes/{id}", GetQuiz).Methods("GET")
+	router.HandleFunc("/quizzes/{id}", UpdateQuiz).Methods("PUT")
+	router.HandleFunc("/quizzes/{id}", DeleteQuiz).Methods("DELETE")
 
 	http.ListenAndServe(":"+port, router)
 }
