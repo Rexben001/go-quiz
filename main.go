@@ -26,7 +26,8 @@ type Quizzes struct {
 	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	Question string             `json:"question,omitempty" bson:"question,omitempty"`
 	Options  []string           `json:"options,omitempty" bson:"options,omitempty"`
-	Answer   string             `json:"answer,omitempty" bson:"answers,omitempty"`
+	Answer   string             `json:"answer,omitempty" bson:"answer,omitempty"`
+	Owner    string             `json:"owner,omitempty" bson:"owner,omitempty"`
 }
 
 type Users struct {
@@ -66,6 +67,7 @@ func main() {
 	router.HandleFunc("/quizzes/{id}", GetQuiz).Methods("GET")
 	router.HandleFunc("/quizzes/{id}", UpdateQuiz).Methods("PUT")
 	router.HandleFunc("/quizzes/{id}", DeleteQuiz).Methods("DELETE")
+	router.HandleFunc("/quizzes/section/{owner}", GetQuizByOwner).Methods("GET")
 
 	router.HandleFunc("/signup", CreateUser).Methods("POST")
 	router.HandleFunc("/login", LoginUser).Methods("POST")
