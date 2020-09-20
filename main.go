@@ -73,8 +73,9 @@ func main() {
 	router.HandleFunc("/quizzes/{id}", GetQuiz).Methods("GET")
 	router.HandleFunc("/quizzes/{id}", UpdateQuiz).Methods("PUT")
 	router.HandleFunc("/quizzes/{id}", DeleteQuiz).Methods("DELETE")
-	router.HandleFunc("/quizzes/section/{owner}", GetQuizByOwner).Methods("GET")
+	router.HandleFunc("/quizzes/section/{id}", GetQuizByOwner).Methods("GET")
 	router.HandleFunc("/quizzes/section", AddSection).Methods("POST")
+	router.HandleFunc("/quizzes/section/id", UpdateSection).Methods("PUT")
 
 	router.HandleFunc("/signup", CreateUser).Methods("POST")
 	router.HandleFunc("/login", LoginUser).Methods("POST")
