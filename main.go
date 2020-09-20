@@ -28,12 +28,18 @@ type Quizzes struct {
 	Options  []string           `json:"options,omitempty" bson:"options,omitempty"`
 	Answer   string             `json:"answer,omitempty" bson:"answer,omitempty"`
 	Owner    string             `json:"owner,omitempty" bson:"owner,omitempty"`
+	UserID   string             `json:"userid,omitempty" bson:"userid,omitempty"`
 }
 
 type Users struct {
 	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
 	Email    string             `json:"email,omitempty" bson:"email,omitempty"`
 	Password string             `json:"password,omitempty" bson:"password,omitempty"`
+}
+type Sections struct {
+	ID     primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	UserID string             `json:"userid,omitempty" bson:"userid,omitempty"`
+	Title  string             `json:"title,omitempty" bson:"title,omitempty"`
 }
 
 var client *mongo.Client
@@ -68,6 +74,7 @@ func main() {
 	router.HandleFunc("/quizzes/{id}", UpdateQuiz).Methods("PUT")
 	router.HandleFunc("/quizzes/{id}", DeleteQuiz).Methods("DELETE")
 	router.HandleFunc("/quizzes/section/{owner}", GetQuizByOwner).Methods("GET")
+	router.HandleFunc("/quizzes/section", AddSection).Methods("POST")
 
 	router.HandleFunc("/signup", CreateUser).Methods("POST")
 	router.HandleFunc("/login", LoginUser).Methods("POST")
