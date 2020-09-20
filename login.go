@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -16,6 +17,7 @@ func LoginUser(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
 	database, _ := os.LookupEnv("DATABASE_NAME")
+	secret, _ := os.LookupEnv("ACCESS_SECRET")
 
 	var user Users
 	var result Users
@@ -48,11 +50,25 @@ func LoginUser(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
+	atClaims := jwt.MapClaims{}
+	atClaims["authorized"] = true
+	atClaims["id"] = result.ID
+	atClaims["rmsil"] = result.Email
+	atClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
+	token, err := at.SignedString([]byte(secret))
+	if err != nil {
+		response.WriteHeader(http.StatusNotFound)
+		response.Write([]byte(`{"message": "Unable to create token"}`))
+		return
+	}
+
 	finalResult := make(map[string]interface{})
 
 	finalResult["message"] = "User logged in successfully"
 	finalResult["status"] = 200
 	finalResult["success"] = true
+	finalResult["token"] = token
 
 	json.NewEncoder(response).Encode(finalResult)
 }
