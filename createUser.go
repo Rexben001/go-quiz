@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -26,10 +27,18 @@ func CreateUser(response http.ResponseWriter, request *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	hashedPassword, err_password := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	errEmail := collection.FindOne(ctx, bson.D{{"email", user.Email}}).Decode(&user)
+
+	if errEmail == nil {
+		response.WriteHeader(http.StatusNotFound)
+		response.Write([]byte(`{"message": "Email already exists"}`))
+		return
+	}
+
+	hashedPassword, errPassword := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 
 	user.Password = string(hashedPassword)
-	if err_password != nil {
+	if errPassword != nil {
 		response.WriteHeader(http.StatusInternalServerError)
 		response.Write([]byte(`{"message": "Unable to create an account. Try again later"}`))
 		return
