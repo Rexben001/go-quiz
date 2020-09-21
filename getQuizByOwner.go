@@ -56,7 +56,7 @@ func GetQuizByOwner(response http.ResponseWriter, request *http.Request) {
 
 	finalResult := make(map[string]interface{})
 
-	finalResult["message"] = "User logged in successfully"
+	finalResult["message"] = "quizzes by owner fetched successfully"
 	finalResult["status"] = 200
 	finalResult["success"] = true
 	finalResult["data"] = quizzes

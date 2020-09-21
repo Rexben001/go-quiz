@@ -77,7 +77,7 @@ func AddSection(response http.ResponseWriter, request *http.Request) {
 
 	finalResult := make(map[string]interface{})
 
-	finalResult["message"] = "New question added successfully"
+	finalResult["message"] = "New section added successfully"
 	finalResult["InsertedId"] = id
 	finalResult["status"] = 201
 	finalResult["success"] = true
