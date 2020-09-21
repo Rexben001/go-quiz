@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -25,7 +26,10 @@ func GetQuizByOwner(response http.ResponseWriter, request *http.Request) {
 	defer cancel()
 
 	params := mux.Vars(request)
-	owner := string(params["owner"])
+	owner := string(params["id"])
+
+	// fmt.Println("params", params)
+	fmt.Println("owner", owner)
 
 	cursor, err := collection.Find(ctx, bson.D{{"owner", owner}})
 	// emailFound := collection.FindOne(ctx, Users{Email: user.Email})
