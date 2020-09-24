@@ -41,6 +41,12 @@ type Sections struct {
 	UserID string             `json:"userid,omitempty" bson:"userid,omitempty"`
 	Title  string             `json:"title,omitempty" bson:"title,omitempty"`
 }
+type Highscores struct {
+	ID      primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	User    string             `json:"user,omitempty" bson:"user,omitempty"`
+	Section string             `json:"section,omitempty" bson:"section,omitempty"`
+	Score   int                `json:"score,omitempty" bson:"score,omitempty"`
+}
 
 var client *mongo.Client
 
@@ -70,14 +76,19 @@ func main() {
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/quizzes", AddQuiz).Methods("POST")
 	router.HandleFunc("/quizzes", GetALlQuizzes).Methods("GET")
+
 	router.HandleFunc("/quizzes/sections", AddSection).Methods("POST")
 	router.HandleFunc("/quizzes/sections", GetAllSections).Methods("GET")
+
 	router.HandleFunc("/quizzes/{id}", GetQuiz).Methods("GET")
 	router.HandleFunc("/quizzes/{id}", UpdateQuiz).Methods("PUT")
 	router.HandleFunc("/quizzes/{id}", DeleteQuiz).Methods("DELETE")
+
 	router.HandleFunc("/quizzes/sections/{id}", GetQuizByOwner).Methods("GET")
 	router.HandleFunc("/quizzes/sections/{id}", UpdateSection).Methods("PUT")
 	router.HandleFunc("/quizzes/sections/{id}", DeleteSection).Methods("DELETE")
+
+	router.HandleFunc("/quizzes/highscores", AddHighscore).Methods("POST")
 
 	router.HandleFunc("/signup", CreateUser).Methods("POST")
 	router.HandleFunc("/login", LoginUser).Methods("POST")
