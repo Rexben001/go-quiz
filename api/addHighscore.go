@@ -38,12 +38,7 @@ func AddHighscore(response http.ResponseWriter, request *http.Request) {
 		id = oid.Hex()
 	}
 
-	finalResult := make(map[string]interface{})
-
-	finalResult["message"] = "New score added successfully"
-	finalResult["InsertedId"] = id
-	finalResult["status"] = 201
-	finalResult["success"] = true
+	finalResult := createResult("New score added successfully", id)
 
 	// writes the objects to standard output
 	json.NewEncoder(response).Encode(finalResult)

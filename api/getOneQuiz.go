@@ -33,12 +33,6 @@ func GetQuiz(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	finalResult := make(map[string]interface{})
-
-	finalResult["message"] = "Quiz fetched successfully"
-	finalResult["status"] = 200
-	finalResult["success"] = true
-	finalResult["data"] = quiz
-
+	finalResult := getResult(200, "Quiz fetched successfully", quiz)
 	json.NewEncoder(response).Encode(finalResult)
 }

@@ -42,12 +42,6 @@ func GetAllSections(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	finalResult := make(map[string]interface{})
-
-	finalResult["message"] = "sections fetched successfully"
-	finalResult["status"] = 200
-	finalResult["success"] = true
-	finalResult["data"] = sections
-	finalResult["totalSections"] = len(sections)
+	finalResult := getResultsSections(200, "sections fetched successfully", sections)
 	json.NewEncoder(response).Encode(finalResult)
 }

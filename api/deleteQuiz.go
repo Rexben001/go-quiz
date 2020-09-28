@@ -68,10 +68,8 @@ func DeleteQuiz(response http.ResponseWriter, request *http.Request) {
 		response.Write([]byte(`{"message": "Unable to delete item"}`))
 		return
 	}
-	finalResult := make(map[string]interface{})
+	finalResult := createResult("Quiz deleted successfully", "")
 
-	finalResult["message"] = "Quiz deleted successfully"
-	finalResult["status"] = 200
-	finalResult["success"] = true
+	// writes the objects to standard output
 	json.NewEncoder(response).Encode(finalResult)
 }

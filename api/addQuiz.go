@@ -67,12 +67,7 @@ func AddQuiz(response http.ResponseWriter, request *http.Request) {
 		id = oid.Hex()
 	}
 
-	finalResult := make(map[string]interface{})
-
-	finalResult["message"] = "New question added successfully"
-	finalResult["InsertedId"] = id
-	finalResult["status"] = 201
-	finalResult["success"] = true
+	finalResult := createResult("New question added successfully", id)
 
 	// writes the objects to standard output
 	json.NewEncoder(response).Encode(finalResult)

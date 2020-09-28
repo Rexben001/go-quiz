@@ -54,12 +54,6 @@ func GetQuizByOwner(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	finalResult := make(map[string]interface{})
-
-	finalResult["message"] = "quizzes by owner fetched successfully"
-	finalResult["status"] = 200
-	finalResult["success"] = true
-	finalResult["data"] = quizzes
-	finalResult["totalQuizzes"] = len(quizzes)
+	finalResult := getResults(200, "quiz fetched by section successfully", quizzes)
 	json.NewEncoder(response).Encode(finalResult)
 }

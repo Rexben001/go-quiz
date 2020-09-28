@@ -71,9 +71,9 @@ func UpdateSection(response http.ResponseWriter, request *http.Request) {
 		response.Write([]byte(`{"message": "Unable to update item"}`))
 		return
 	}
-	finalResult := make(map[string]interface{})
-	finalResult["message"] = "Section updated successfully"
-	finalResult["status"] = 201
-	finalResult["success"] = true
+
+	finalResult := createResult("Section updated successfully", "")
+
+	// writes the objects to standard output
 	json.NewEncoder(response).Encode(finalResult)
 }

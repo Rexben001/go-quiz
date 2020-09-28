@@ -68,10 +68,9 @@ func DeleteSection(response http.ResponseWriter, request *http.Request) {
 		response.Write([]byte(`{"message": "Unable to delete item"}`))
 		return
 	}
-	finalResult := make(map[string]interface{})
 
-	finalResult["message"] = "Section deleted successfully"
-	finalResult["status"] = 200
-	finalResult["success"] = true
+	finalResult := createResult("Section deleted successfully", "")
+
+	// writes the objects to standard output
 	json.NewEncoder(response).Encode(finalResult)
 }
