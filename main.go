@@ -1,18 +1,15 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"time"
+
+	index "goQuiz/api"
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func init() {
@@ -22,76 +19,34 @@ func init() {
 	}
 }
 
-type Quizzes struct {
-	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Question string             `json:"question,omitempty" bson:"question,omitempty"`
-	Options  []string           `json:"options,omitempty" bson:"options,omitempty"`
-	Answer   string             `json:"answer,omitempty" bson:"answer,omitempty"`
-	Owner    string             `json:"owner,omitempty" bson:"owner,omitempty"`
-	UserID   string             `json:"userid,omitempty" bson:"userid,omitempty"`
-}
-
-type Users struct {
-	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Email    string             `json:"email,omitempty" bson:"email,omitempty"`
-	Password string             `json:"password,omitempty" bson:"password,omitempty"`
-}
-type Sections struct {
-	ID     primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	UserID string             `json:"userid,omitempty" bson:"userid,omitempty"`
-	Title  string             `json:"title,omitempty" bson:"title,omitempty"`
-}
-type Highscores struct {
-	ID      primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	User    string             `json:"user,omitempty" bson:"user,omitempty"`
-	Section string             `json:"section,omitempty" bson:"section,omitempty"`
-	Score   int                `json:"score,omitempty" bson:"score,omitempty"`
-}
-
-var client *mongo.Client
-
 func main() {
 	fmt.Println("App has started!!!!")
 
 	port, _ := os.LookupEnv("PORT")
 
-	mongoURI, exists := os.LookupEnv("MONGO_URI")
-
-	if exists {
-		fmt.Println("ENV files loaded ")
-	}
-
-	// define timeout for Mongo and Go
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	// mongodb connection
-	client, _ = mongo.Connect(ctx, options.Client().ApplyURI(mongoURI))
-
-	if client != nil {
-		fmt.Println("Connected successfully")
-	}
+	index.Index()
 
 	// define router
 	router := mux.NewRouter()
-	router.HandleFunc("/", Index)
-	router.HandleFunc("/quizzes", AddQuiz).Methods("POST")
-	router.HandleFunc("/quizzes", GetALlQuizzes).Methods("GET")
+	router.HandleFunc("/", index.IndexRoute)
+	router.HandleFunc("/quizzes", index.AddQuiz).Methods("POST")
+	router.HandleFunc("/quizzes", index.GetALlQuizzes).Methods("GET")
 
-	router.HandleFunc("/quizzes/sections", AddSection).Methods("POST")
-	router.HandleFunc("/quizzes/sections", GetAllSections).Methods("GET")
+	router.HandleFunc("/quizzes/sections", index.AddSection).Methods("POST")
+	router.HandleFunc("/quizzes/sections", index.GetAllSections).Methods("GET")
 
-	router.HandleFunc("/quizzes/{id}", GetQuiz).Methods("GET")
-	router.HandleFunc("/quizzes/{id}", UpdateQuiz).Methods("PUT")
-	router.HandleFunc("/quizzes/{id}", DeleteQuiz).Methods("DELETE")
+	router.HandleFunc("/quizzes/{id}", index.GetQuiz).Methods("GET")
+	router.HandleFunc("/quizzes/{id}", index.UpdateQuiz).Methods("PUT")
+	router.HandleFunc("/quizzes/{id}", index.DeleteQuiz).Methods("DELETE")
 
-	router.HandleFunc("/quizzes/sections/{id}", GetQuizByOwner).Methods("GET")
-	router.HandleFunc("/quizzes/sections/{id}", UpdateSection).Methods("PUT")
-	router.HandleFunc("/quizzes/sections/{id}", DeleteSection).Methods("DELETE")
+	router.HandleFunc("/quizzes/sections/{id}", index.GetQuizByOwner).Methods("GET")
+	router.HandleFunc("/quizzes/sections/{id}", index.UpdateSection).Methods("PUT")
+	router.HandleFunc("/quizzes/sections/{id}", index.DeleteSection).Methods("DELETE")
 
-	router.HandleFunc("/quizzes/highscores", AddHighscore).Methods("POST")
+	router.HandleFunc("/quizzes/highscores", index.AddHighscore).Methods("POST")
 
-	router.HandleFunc("/signup", CreateUser).Methods("POST")
-	router.HandleFunc("/login", LoginUser).Methods("POST")
+	router.HandleFunc("/signup", index.CreateUser).Methods("POST")
+	router.HandleFunc("/login", index.LoginUser).Methods("POST")
 
 	http.ListenAndServe(":"+port, router)
 }
