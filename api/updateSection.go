@@ -3,6 +3,7 @@ package index
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -38,14 +39,13 @@ func UpdateSection(response http.ResponseWriter, request *http.Request) {
 	result, err := collection.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": section})
 
 	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		responseError(err, response)
 		return
 	}
 
 	if result.ModifiedCount == 0 {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "Unable to update item"}`))
+		newErr := errors.New("Unable to update items")
+		responseError(newErr, response)
 		return
 	}
 

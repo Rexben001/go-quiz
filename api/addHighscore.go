@@ -27,8 +27,7 @@ func AddHighscore(response http.ResponseWriter, request *http.Request) {
 
 	result, err := collection.InsertOne(ctx, highscore)
 	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		responseError(err, response)
 		return
 	}
 

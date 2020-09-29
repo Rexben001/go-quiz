@@ -3,6 +3,7 @@ package index
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -36,14 +37,13 @@ func DeleteQuiz(response http.ResponseWriter, request *http.Request) {
 	result, err := collection.DeleteOne(ctx, bson.M{"_id": id})
 
 	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		responseError(err, response)
 		return
 	}
+
 	if result.DeletedCount == 0 {
-		// log.Fatal("Error on deleting one Hero", err)
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "Unable to delete item"}`))
+		newErr := errors.New("Unable to delete items")
+		responseError(newErr, response)
 		return
 	}
 	finalResult := createResult("Quiz deleted successfully", "")

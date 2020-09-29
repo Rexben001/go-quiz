@@ -3,6 +3,7 @@ package index
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -28,8 +29,8 @@ func CreateUser(response http.ResponseWriter, request *http.Request) {
 	errEmail := collection.FindOne(ctx, bson.D{{"email", user.Email}}).Decode(&user)
 
 	if errEmail == nil {
-		response.WriteHeader(http.StatusNotFound)
-		response.Write([]byte(`{"message": "Email already exists"}`))
+		newErr := errors.New("Email already exists")
+		responseError(newErr, response)
 		return
 	}
 
@@ -37,15 +38,14 @@ func CreateUser(response http.ResponseWriter, request *http.Request) {
 
 	user.Password = string(hashedPassword)
 	if errPassword != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "Unable to create an account. Try again later"}`))
+		newErr := errors.New("Unable to create an account. Try again later")
+		responseError(newErr, response)
 		return
 	}
 
 	result, err := collection.InsertOne(ctx, user)
 	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		responseError(err, response)
 		return
 	}
 

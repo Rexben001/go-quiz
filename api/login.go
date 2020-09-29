@@ -3,6 +3,7 @@ package index
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -35,17 +36,16 @@ func LoginUser(response http.ResponseWriter, request *http.Request) {
 	fmt.Println(err)
 
 	if err != nil {
-		response.WriteHeader(http.StatusNotFound)
-		response.Write([]byte(`{"message": "Email or password is incorrect"}`))
+		newErr := errors.New("Invalid email or password")
+		responseError(newErr, response)
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(user.Password))
 
 	if err != nil {
-		fmt.Println("Wrong password")
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "Email or password is incorrect"}`))
+		newErr := errors.New("Invalid email or password")
+		responseError(newErr, response)
 		return
 	}
 
@@ -57,8 +57,8 @@ func LoginUser(response http.ResponseWriter, request *http.Request) {
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	token, err := at.SignedString([]byte(secret))
 	if err != nil {
-		response.WriteHeader(http.StatusNotFound)
-		response.Write([]byte(`{"message": "Unable to create token"}`))
+		newErr := errors.New("Unable to generate token")
+		responseError(newErr, response)
 		return
 	}
 

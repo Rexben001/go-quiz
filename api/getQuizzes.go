@@ -21,9 +21,6 @@ func GetALlQuizzes(response http.ResponseWriter, request *http.Request) {
 	cursor, err := collection.Find(ctx, bson.M{})
 
 	if err != nil {
-		// response.WriteHeader(http.StatusInternalServerError)
-		// response.Write([]byte(`{"message": "` + err.Error() + `"}`))
-		// return
 		responseError(err, response)
 		return
 	}
@@ -38,8 +35,6 @@ func GetALlQuizzes(response http.ResponseWriter, request *http.Request) {
 	}
 	// handle error
 	if err := cursor.Err(); err != nil {
-		// response.WriteHeader(http.StatusInternalServerError)
-		// response.Write([]byte(`{"message": "` + err.Error() + `"}`))
 		responseError(err, response)
 		return
 	}

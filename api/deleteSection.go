@@ -3,6 +3,7 @@ package index
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -37,14 +38,13 @@ func DeleteSection(response http.ResponseWriter, request *http.Request) {
 	resultQuiz, errQuiz := quizCollection.DeleteMany(ctx, bson.M{"owner": paramsID})
 
 	if err != nil || errQuiz != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		responseError(err, response)
 		return
 	}
-	if result.DeletedCount == 0 || resultQuiz.DeletedCount == 0 {
-		// log.Fatal("Error on deleting one Hero", err)
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "Unable to delete item"}`))
+
+	if resultQuiz.DeletedCount == 0 || result.DeletedCount == 0 {
+		newErr := errors.New("Unable to delete items")
+		responseError(newErr, response)
 		return
 	}
 

@@ -3,6 +3,7 @@ package index
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -35,15 +36,14 @@ func AddSection(response http.ResponseWriter, request *http.Request) {
 	errTitle := collection.FindOne(ctx, bson.D{{"title", section.Title}}).Decode(&section)
 
 	if errTitle == nil {
-		response.WriteHeader(400)
-		response.Write([]byte(`{"message": "Email already exists"}`))
+		newErr := errors.New("Title exists already")
+		responseError(newErr, response)
 		return
 	}
 
 	result, err := collection.InsertOne(ctx, section)
 	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		responseError(err, response)
 		return
 	}
 

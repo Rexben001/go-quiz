@@ -32,8 +32,7 @@ func GetQuizByOwner(response http.ResponseWriter, request *http.Request) {
 	// emailFound := collection.FindOne(ctx, Users{Email: user.Email})
 
 	if err != nil {
-		response.WriteHeader(http.StatusNotFound)
-		response.Write([]byte(`{"message": "Email or password is incorrect"}`))
+		responseError(err, response)
 		return
 	}
 
@@ -46,8 +45,7 @@ func GetQuizByOwner(response http.ResponseWriter, request *http.Request) {
 	}
 	// handle error
 	if err := cursor.Err(); err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		responseError(err, response)
 		return
 	}
 

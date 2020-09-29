@@ -25,8 +25,7 @@ func GetQuiz(response http.ResponseWriter, request *http.Request) {
 	err := collection.FindOne(ctx, Quizzes{ID: id}).Decode(&quiz)
 
 	if err != nil {
-		response.WriteHeader(http.StatusInternalServerError)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		responseError(err, response)
 		return
 	}
 

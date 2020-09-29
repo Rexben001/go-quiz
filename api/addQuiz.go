@@ -33,8 +33,7 @@ func AddQuiz(response http.ResponseWriter, request *http.Request) {
 
 	result, err := collection.InsertOne(ctx, quiz)
 	if err != nil {
-		response.WriteHeader(400)
-		response.Write([]byte(`{"message": "` + err.Error() + `"}`))
+		responseError(err, response)
 		return
 	}
 
