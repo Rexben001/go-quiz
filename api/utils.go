@@ -1,9 +1,12 @@
 package index
 
 import (
+	"errors"
 	"net/http"
 	"os"
+	"strings"
 
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -52,7 +55,6 @@ func getResult(status int, message string, quiz Quizzes) map[string]interface{} 
 func createResult(message string, id string) map[string]interface{} {
 
 	finalResult := make(map[string]interface{})
-
 	finalResult["message"] = message
 	if id != "" {
 		finalResult["InsertedId"] = id
@@ -60,5 +62,33 @@ func createResult(message string, id string) map[string]interface{} {
 	finalResult["status"] = 201
 	finalResult["success"] = true
 	return finalResult
+
+}
+
+func validateToken(request *http.Request) (string, error) {
+
+	secret, _ := os.LookupEnv("ACCESS_SECRET")
+
+	tokenString := request.Header.Get("Authorization")
+
+	if string(tokenString) == "" {
+		return "", errors.New("Pls, provide a valid token")
+	}
+
+	updatedToken := strings.Split(tokenString, " ")[1]
+
+	token, _ := jwt.Parse(updatedToken, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return "", errors.New("Pls, provide a valid token")
+		}
+		return []byte(secret), nil
+	})
+
+	var errEmpty error
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims["id"].(string), errEmpty
+	}
+	return "", errors.New("Pls, provide a valid token")
 
 }

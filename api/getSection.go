@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
-	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,9 +12,8 @@ import (
 func GetAllSections(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var sections []Sections
-	database, _ := os.LookupEnv("DATABASE_NAME")
+	collection := getDB("sections")
 
-	collection := client.Database(database).Collection("sections")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	// get all the items from the collection

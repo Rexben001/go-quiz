@@ -16,7 +16,6 @@ import (
 func LoginUser(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
-	database, _ := os.LookupEnv("DATABASE_NAME")
 	secret, _ := os.LookupEnv("ACCESS_SECRET")
 
 	var user Users
@@ -24,7 +23,7 @@ func LoginUser(response http.ResponseWriter, request *http.Request) {
 
 	json.NewDecoder(request.Body).Decode(&user)
 
-	collection := client.Database(database).Collection("users")
+	collection := getDB("users")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -15,13 +14,11 @@ import (
 func GetQuizByOwner(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 
-	database, _ := os.LookupEnv("DATABASE_NAME")
-
 	var quizzes []Quizzes
 
 	json.NewDecoder(request.Body).Decode(&quizzes)
 
-	collection := client.Database(database).Collection("quizzes")
+	collection := getDB("quizzes")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
