@@ -43,10 +43,12 @@ var client *mongo.Client
 
 func Index() {
 
-	err := godotenv.Load()
+	err := godotenv.Load("../.env")
 
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		// log.Fatal("Error loading .env file")
+		fmt.Println(`{"message": "` + err.Error() + `"}`)
+		log.Fatal(`{"message": "` + err.Error() + `"}`)
 	}
 
 	mongoURI, exists := os.LookupEnv("MONGO_URI")
