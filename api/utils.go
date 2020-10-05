@@ -19,7 +19,7 @@ func getDB(name string) *mongo.Collection {
 }
 
 func responseError(err error, response http.ResponseWriter) {
-	response.WriteHeader(http.StatusInternalServerError)
+	response.WriteHeader(400)
 	response.Write([]byte(`{"message": "` + err.Error() + `"}`))
 }
 
