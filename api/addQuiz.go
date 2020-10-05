@@ -27,6 +27,13 @@ func AddQuiz(response http.ResponseWriter, request *http.Request) {
 	//json.NewDecoder() removes all but the Name field from each object
 	json.NewDecoder(request.Body).Decode(&quiz)
 
+	validateErr := validateAddQuiz(quiz)
+
+	if validateErr != nil {
+		response.WriteHeader(400)
+		json.NewEncoder(response).Encode(validateErr)
+		return
+	}
 	collection := getDB("quizzes")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
