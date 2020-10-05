@@ -15,9 +15,9 @@ import (
 
 type Quizzes struct {
 	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Question string             `json:"question,omitempty" bson:"question,omitempty"`
-	Options  []string           `json:"options,omitempty" bson:"options,omitempty"`
-	Answer   string             `json:"answer,omitempty" bson:"answer,omitempty"`
+	Question string             `json:"question,required" bson:"question,required"`
+	Options  []string           `json:"options,required" bson:"options,required"`
+	Answer   string             `json:"answer,required" bson:"answer,required"`
 	Owner    string             `json:"owner,omitempty" bson:"owner,omitempty"`
 	UserID   string             `json:"userid,omitempty" bson:"userid,omitempty"`
 }
@@ -44,14 +44,13 @@ var client *mongo.Client
 func Index() {
 
 	var err error
-	err = godotenv.Load("../.env")
+	err = godotenv.Load()
 
 	if err != nil {
-		err = godotenv.Load()
+		err = godotenv.Load("../.env")
 	}
 
 	if err != nil {
-
 		log.Fatal(`{"message": "` + err.Error() + `"}`)
 	}
 

@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -23,6 +24,20 @@ func LoginUser(response http.ResponseWriter, request *http.Request) {
 	var result Users
 
 	json.NewDecoder(request.Body).Decode(&user)
+
+	// if len(user.Email) < 4 {
+	// 	newErr := errors.New("Invalid email or password >>input")
+	// 	responseError(newErr, response)
+	// 	return
+	// }
+
+	re := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
+
+	if !re.MatchString(user.Email) {
+		newErr := errors.New("Pls, enter a valid email address")
+		responseError(newErr, response)
+		return
+	}
 
 	collection := getDB("users")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
