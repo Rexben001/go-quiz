@@ -68,7 +68,7 @@ func LoginUser(response http.ResponseWriter, request *http.Request) {
 	atClaims["authorized"] = true
 	atClaims["id"] = result.ID
 	atClaims["email"] = result.Email
-	atClaims["exp"] = time.Now().Add(time.Minute * 15).Unix()
+	atClaims["exp"] = time.Now().Add(time.Minute * 60).Unix()
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	token, err := at.SignedString([]byte(secret))
 	if err != nil {
