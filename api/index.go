@@ -46,9 +46,9 @@ func Index() {
 	var err error
 	err = godotenv.Load()
 
-	if err != nil {
-		err = godotenv.Load("../.env")
-	}
+	// if err != nil {
+	// 	err = godotenv.Load("../.env")
+	// }
 
 	if err != nil {
 		log.Fatal(`{"message": "` + err.Error() + `"}`)
