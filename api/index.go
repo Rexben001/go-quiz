@@ -57,6 +57,8 @@ func Index() {
 
 	mongoURI, exists := os.LookupEnv("MONGO_URI")
 
+	fmt.Println("mongoURI>>>", mongoURI)
+
 	if exists {
 		fmt.Println("ENV files loaded ")
 	}

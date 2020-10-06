@@ -2,6 +2,7 @@ package index
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
@@ -13,6 +14,9 @@ import (
 func getDB(name string) *mongo.Collection {
 
 	database, _ := os.LookupEnv("DATABASE_NAME")
+
+	fmt.Println("database>>>", database)
+
 	collection := client.Database(database).Collection(name)
 
 	return collection
