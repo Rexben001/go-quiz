@@ -3,7 +3,6 @@ package index
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -51,7 +50,9 @@ func Index() {
 	// }
 
 	if err != nil {
-		log.Fatal(`{"message": "` + err.Error() + `"}`)
+		// log.Fatal(`{"message": "` + err.Error() + `"}`)
+		fmt.Println(`{"message": "` + err.Error() + `"}`)
+
 	}
 
 	mongoURI, exists := os.LookupEnv("MONGO_URI")
