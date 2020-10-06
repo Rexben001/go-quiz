@@ -31,7 +31,7 @@ func DeleteQuiz(response http.ResponseWriter, request *http.Request) {
 
 	// convert params id (string) to MongoDB ID
 	id, _ := primitive.ObjectIDFromHex(params["id"])
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// get item by id
 	result, err := collection.DeleteOne(ctx, bson.M{"_id": id})

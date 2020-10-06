@@ -35,7 +35,7 @@ func AddQuiz(response http.ResponseWriter, request *http.Request) {
 		return
 	}
 	collection := getDB("quizzes")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	result, err := collection.InsertOne(ctx, quiz)

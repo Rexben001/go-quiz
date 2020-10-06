@@ -19,7 +19,7 @@ func GetQuizByOwner(response http.ResponseWriter, request *http.Request) {
 	json.NewDecoder(request.Body).Decode(&quizzes)
 
 	collection := getDB("quizzes")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	params := mux.Vars(request)

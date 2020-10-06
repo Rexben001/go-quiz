@@ -14,7 +14,7 @@ func GetALlQuizzes(response http.ResponseWriter, request *http.Request) {
 	var quizzes []Quizzes
 
 	collection := getDB("quizzes")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 
 	defer cancel()
 	// get all the items from the collection

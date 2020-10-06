@@ -31,7 +31,7 @@ func DeleteSection(response http.ResponseWriter, request *http.Request) {
 	id, _ := primitive.ObjectIDFromHex(params["id"])
 	paramsID := string(params["id"])
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// get item by id
 	result, err := sectionCollection.DeleteOne(ctx, bson.M{"_id": id})

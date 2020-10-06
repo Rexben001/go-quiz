@@ -19,7 +19,7 @@ func GetQuiz(response http.ResponseWriter, request *http.Request) {
 	// convert params id (string) to MongoDB ID
 	id, _ := primitive.ObjectIDFromHex(params["id"])
 	collection := getDB("quizzes")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// get item by id
 	err := collection.FindOne(ctx, Quizzes{ID: id}).Decode(&quiz)

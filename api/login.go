@@ -40,7 +40,7 @@ func LoginUser(response http.ResponseWriter, request *http.Request) {
 	}
 
 	collection := getDB("users")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// filter := bson.D{"email": user.Email}

@@ -14,7 +14,7 @@ func GetAllSections(response http.ResponseWriter, request *http.Request) {
 	var sections []Sections
 	collection := getDB("sections")
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// get all the items from the collection
 	cursor, err := collection.Find(ctx, bson.M{})

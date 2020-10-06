@@ -22,7 +22,7 @@ func AddHighscore(response http.ResponseWriter, request *http.Request) {
 	json.NewDecoder(request.Body).Decode(&highscore)
 
 	collection := client.Database(database).Collection("highscores")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	result, err := collection.InsertOne(ctx, highscore)

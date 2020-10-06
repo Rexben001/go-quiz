@@ -21,7 +21,7 @@ func CreateUser(response http.ResponseWriter, request *http.Request) {
 	//json.NewDecoder() removes all but the Name field from each object
 	json.NewDecoder(request.Body).Decode(&user)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	collection := getDB("users")

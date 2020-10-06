@@ -62,7 +62,7 @@ func Index() {
 	}
 
 	// define timeout for Mongo and Go
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// mongodb connection
 	client, _ = mongo.Connect(ctx, options.Client().ApplyURI(mongoURI))

@@ -31,7 +31,7 @@ func UpdateQuiz(response http.ResponseWriter, request *http.Request) {
 	// convert params id (string) to MongoDB ID
 	id, _ := primitive.ObjectIDFromHex(params["id"])
 	collection := getDB("quizzes")
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 	// get item by id
 	result, err := collection.UpdateOne(ctx, bson.M{"_id": id}, bson.M{"$set": quiz})
